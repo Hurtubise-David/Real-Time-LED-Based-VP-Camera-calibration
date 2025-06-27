@@ -1,4 +1,4 @@
-# Real-Time LED-Based Camera Tracking for 3D Virtual Film Production with Foundation Models
+# Real-Time LED-Based Camera Tracking for 3D Virtual Film Production
 # Abstract
 Virtual Production (VP) using LED volumes and real-time rendering engines has transformed modern filmmaking by enabling the
 seamless blending of physical and virtual environments directly on set. However, achieving robust camera calibration in VP requires
