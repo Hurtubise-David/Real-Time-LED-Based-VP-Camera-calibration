@@ -1,70 +1,68 @@
 import tkinter as tk
 from tkinter import ttk
 import cv2
+from PIL import Image, ImageTk
 import numpy as np
-import threading
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class Visualizer:
-    def __init__(self, reset_callback):
-        self.root = tk.Tk()
-        self.root.title("Mini Visual Odometry UI")
+    def __init__(self, reset_callback=None):
+        self.reset_callback = reset_callback
 
-        # Position label
-        self.position_var = tk.StringVar()
-        self.position_label = ttk.Label(self.root, textvariable=self.position_var, font=("Helvetica", 14))
+        # Création de la fenêtre tkinter
+        self.root = tk.Tk()
+        self.root.title("Visual Odometry UI")
+
+        # Vue caméra
+        self.image_label = tk.Label(self.root)
+        self.image_label.pack()
+
+        # Coordonnées X, Y, Z
+        self.position_label = ttk.Label(self.root, text="Position: x=0.00, y=0.00, z=0.00", font=("Arial", 14))
         self.position_label.pack(pady=10)
 
-        # Reset button
-        self.reset_button = ttk.Button(self.root, text="Reset Camera Pose", command=reset_callback)
+        # Bouton Reset
+        self.reset_button = ttk.Button(self.root, text="Reset Camera", command=self.reset_pose)
         self.reset_button.pack(pady=5)
 
-        # Matplotlib 3D plot for trajectory
-        self.fig = plt.Figure(figsize=(5, 4), dpi=100)
-        self.ax = self.fig.add_subplot(111, projection='3d')
-        self.ax.set_title("Camera Trajectory")
-        self.ax.set_xlabel("X")
-        self.ax.set_ylabel("Y")
-        self.ax.set_zlabel("Z")
-
-        self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)
-        self.canvas.get_tk_widget().pack()
-
-        # Video window (OpenCV in another thread)
+        # Gestion asynchrone
         self.frame = None
-        self.video_thread = threading.Thread(target=self._video_loop, daemon=True)
-        self.video_thread.start()
+        self.trajectory = []
+        self.position = np.array([0.0, 0.0, 0.0])
 
-    def _video_loop(self):
-        while True:
-            if self.frame is not None:
-                cv2.imshow("Live Camera View", self.frame)
-                if cv2.waitKey(1) & 0xFF == 27:
-                    break
-        cv2.destroyAllWindows()
+        # Démarrer loop
+        self.root.after(1, self.update_tk)
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+
+    def reset_pose(self):
+        if self.reset_callback:
+            self.reset_callback()
 
     def update_view(self, frame, trajectory, position):
-        # Update video frame
         self.frame = frame
+        self.trajectory = trajectory
+        self.position = position
 
-        # Update position text
-        x, y, z = position
-        self.position_var.set(f"Position → X: {x:.2f}, Y: {y:.2f}, Z: {z:.2f}")
+    def update_tk(self):
+        if self.frame is not None:
+            # Conversion BGR -> RGB -> PhotoImage
+            img_rgb = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
+            img_pil = Image.fromarray(img_rgb)
+            img_tk = ImageTk.PhotoImage(image=img_pil)
 
-        # Update trajectory plot
-        self.ax.cla()
-        self.ax.set_title("Camera Trajectory")
-        self.ax.set_xlabel("X")
-        self.ax.set_ylabel("Y")
-        self.ax.set_zlabel("Z")
+            self.image_label.imgtk = img_tk
+            self.image_label.configure(image=img_tk)
 
-        if len(trajectory) > 0:
-            traj = np.array(trajectory)
-            self.ax.plot(traj[:, 0], traj[:, 1], traj[:, 2], 'b-')
+            # Affichage position
+            x, y, z = self.position
+            self.position_label.config(text=f"Position: x={x:.2f}, y={y:.2f}, z={z:.2f}")
 
-        self.canvas.draw()
+        self.root.after(10, self.update_tk)
 
-    def start(self):
+    def run(self):
         self.root.mainloop()
-    
+
+    def close(self):
+        self.root.quit()
+
+    def on_close(self):
+        self.close()
