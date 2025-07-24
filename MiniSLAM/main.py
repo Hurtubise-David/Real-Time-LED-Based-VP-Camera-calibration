@@ -64,9 +64,9 @@ def main():
                     T = np.eye(4)
                     T[:3, :3] = R
                     T[:3, 3] = t.flatten()
-                    pose[:] = pose @ np.linalg.inv(T)
-                    position = pose[:3, 3]
-                    trajectory.append(position)
+                    shared_state["pose"][:] = shared_state["pose"] @ np.linalg.inv(T)
+                    position = shared_state["pose"][:3, 3]
+                    shared_state["trajectory"].append(position)
                     print(f"Position: x={position[0]:.2f}, y={position[1]:.2f}, z={position[2]:.2f}")
 
             shared_state["frame"] = frame
