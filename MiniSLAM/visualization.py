@@ -62,6 +62,9 @@ class Visualizer:
     def reset_pose(self):
         if self.reset_callback:
             self.reset_callback()
+    
+    def set_param_callback(self, callback):
+        self.param_callback = callback
 
     def update_view(self, frame, trajectory, position):
         self.frame = frame
