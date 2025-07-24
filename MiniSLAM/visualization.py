@@ -46,13 +46,13 @@ class Visualizer:
         self.checks = tk.IntVar(value=50)
 
         ttk.Label(self.root, text="Ratio (0.5 - 1.0)").pack()
-        ttk.Scale(self.root, from_=0.5, to=1.0, resolution=0.01, orient='horizontal', variable=self.ratio, command=lambda e: self._on_slider_change()).pack()
+        tk.Scale(self.root, from_=0.5, to=1.0, resolution=0.01, orient='horizontal', variable=self.ratio, command=lambda e: self._on_slider_change()).pack()
 
         ttk.Label(self.root, text="ORB nfeatures").pack()
-        ttk.Scale(self.root, from_=500, to=3000, resolution=100, orient='horizontal', variable=self.nfeatures, command=lambda e: self._on_slider_change()).pack()
+        tk.Scale(self.root, from_=500, to=3000, resolution=100, orient='horizontal', variable=self.nfeatures, command=lambda e: self._on_slider_change()).pack()
 
         ttk.Label(self.root, text="FLANN checks").pack()
-        ttk.Scale(self.root, from_=10, to=100, resolution=10, orient='horizontal', variable=self.checks, command=lambda e: self._on_slider_change()).pack()
+        tk.Scale(self.root, from_=10, to=100, resolution=10, orient='horizontal', variable=self.checks, command=lambda e: self._on_slider_change()).pack()
 
         # Gestion asynchrone
         self.frame = None
