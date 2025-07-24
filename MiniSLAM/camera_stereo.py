@@ -33,3 +33,10 @@ class StereoCamera:
         frame_right = frame[:, w_half:]
 
         return frame_left, frame_right
+    
+    def get_left_frame(self):
+        left, _ = self.get_frames()
+        return left
+
+    def release(self):
+        self.cap.release()
