@@ -51,6 +51,8 @@ def main():
         prev_frame = frame
         prev_kp, prev_des = kp, des
 
+        ui.update_view(frame, trajectory, position)
+
         # ESC pour quitter
         if cv2.waitKey(1) & 0xFF == 27:
             break
