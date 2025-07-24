@@ -5,6 +5,12 @@ from visualization import Visualizer
 import numpy as np
 import cv2
 
+# Callback pour reset
+def reset_pose():
+    global pose, trajectory
+    pose = np.eye(4)
+    trajectory = []
+    print("Camera pose reset to (0, 0, 0)")
 
 def main():
     camera = StereoCamera()
