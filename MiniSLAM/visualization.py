@@ -9,6 +9,9 @@ class Visualizer:
     def __init__(self, reset_callback=None):
         self.reset_callback = reset_callback
 
+        self.matches_img = None
+        self.ransac_img = None
+
         # Création de la fenêtre tkinter
         self.root = tk.Tk()
         self.root.title("MiniSLAM")
