@@ -82,6 +82,13 @@ class Visualizer:
         self.ransac_img = ransac_img
 
     def update_tk(self):
+        if self.shared_state:
+            self.frame = self.shared_state.get("frame", None)
+            self.trajectory = self.shared_state.get("trajectory", [])
+            self.position = self.shared_state.get("position", np.array([0.0, 0.0, 0.0]))
+            self.matches_img = self.shared_state.get("matches_img", None)
+            self.ransac_img = self.shared_state.get("ransac_img", None)
+
         if self.frame is not None:
             img_rgb = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
             img_pil = Image.fromarray(img_rgb)
