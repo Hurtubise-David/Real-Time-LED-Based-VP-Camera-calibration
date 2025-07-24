@@ -22,6 +22,12 @@ class Visualizer:
         self.position_label = ttk.Label(self.root, text="Position: x=0.00, y=0.00, z=0.00", font=("Arial", 14))
         self.position_label.pack(pady=10)
 
+        # FPS label
+        self.fps_label = ttk.Label(self.root, text="FPS: 0.00", font=("Arial", 12))
+        self.fps_label.pack(pady=5)
+        self.last_time = None
+        self.current_fps = 0.0
+
         # Bouton Reset
         self.reset_button = ttk.Button(self.root, text="Reset Camera", command=self.reset_pose)
         self.reset_button.pack(pady=5)
