@@ -34,7 +34,7 @@ def main():
 
     prev_kp, prev_des = tracker.detect(prev_frame)
 
-    ui = Visualizer(reset_callback=reset_pose)
+    ui = Visualizer(reset_callback=reset_pose, shared_state=shared_state)
 
     def update_tracker_params(ratio, nfeatures, checks):
         tracker.set_parameters(ratio, int(nfeatures), int(checks))
