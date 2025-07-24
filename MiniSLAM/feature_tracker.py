@@ -7,10 +7,10 @@ class ORBTracker:
 
         # FLANN pour ORB (avec LSH = Locality-Sensitive Hashing)
         index_params = dict(algorithm=6,  # FLANN_INDEX_LSH
-                            table_number=12,
+                            table_number=6,
                             key_size=20,
-                            multi_probe_level=2)
-        search_params = dict(checks=100)
+                            multi_probe_level=1)
+        search_params = dict(checks=50)
         self.matcher = cv2.FlannBasedMatcher(index_params, search_params)
 
     def detect(self, image):
@@ -22,7 +22,7 @@ class ORBTracker:
         keypoints, descriptors = self.orb.detectAndCompute(image, None)
         return keypoints, descriptors            
 
-    def match(self, kp1, des1, kp2, des2, ratio=0.6):
+    def match(self, kp1, des1, kp2, des2, ratio=0.2):
         """
         Matche les descripteurs entre deux frames avec le ratio test
         :param kp1: keypoints image t-1
