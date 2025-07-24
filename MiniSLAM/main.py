@@ -35,3 +35,10 @@ def main():
                         trajectory.append(position)
 
                         print(f"Position: x={position[0]:.2f}, y={position[1]:.2f}, z={position[2]:.2f}")
+
+        prev_frame = frame
+        prev_kp, prev_des = kp, des
+
+        # ESC pour quitter
+        if cv2.waitKey(1) & 0xFF == 27:
+            break
