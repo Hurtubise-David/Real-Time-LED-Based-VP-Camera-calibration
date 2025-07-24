@@ -16,6 +16,9 @@ def reset_pose():
     trajectory = []
     print("Camera pose reset to (0, 0, 0)")
 
+# Lancer la UI
+ui = Visualizer(reset_callback=reset_pose)
+
 def main():
     camera = StereoCamera()
     tracker = ORBTracker()
