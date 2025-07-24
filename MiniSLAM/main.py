@@ -4,6 +4,7 @@ from pose_estimation import estimate_pose_essential
 from visualization import Visualizer
 import numpy as np
 import cv2
+import threading
 
 # Variables globales
 pose = np.eye(4)
@@ -68,8 +69,8 @@ def main():
             prev_kp, prev_des = kp, des
 
         ui.root.after(1, update)
-
-    ui.root.after(1, update)
+    # Lancer dans un thread
+    threading.Thread(target=update, daemon=True).start()
     ui.run()
 
     camera.release()
