@@ -11,3 +11,6 @@ def main():
 
     pose = np.eye(4) # Matrice 4x4 de la pose cumulée (monde → caméra)
     trajectory = []
+
+    prev_frame = camera.get_left_frame()
+    prev_kp, prev_des = tracker.detect(prev_frame)
