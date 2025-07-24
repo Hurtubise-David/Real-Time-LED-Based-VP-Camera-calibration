@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-Class ORBTracker:
+class ORBTracker:
     def __init__(self, max_features=2000):
         self.orb = cv2.ORB_create(nfeatures=max_features)
 
