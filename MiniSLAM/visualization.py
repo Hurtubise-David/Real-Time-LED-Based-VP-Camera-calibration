@@ -36,3 +36,10 @@ class Visualizer:
         self.video_thread = threading.Thread(target=self._video_loop, daemon=True)
         self.video_thread.start()
 
+    def _video_loop(self):
+        while True:
+            if self.frame is not None:
+                cv2.imshow("Live Camera View", self.frame)
+                if cv2.waitKey(1) & 0xFF == 27:
+                    break
+        cv2.destroyAllWindows()
