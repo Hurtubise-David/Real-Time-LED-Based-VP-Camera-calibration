@@ -20,6 +20,8 @@ def reset_pose():
 ui = Visualizer(reset_callback=reset_pose)
 
 def main():
+    global pose, trajectory
+
     camera = StereoCamera()
     tracker = ORBTracker()
 
@@ -51,7 +53,7 @@ def main():
                         print(f"Position: x={position[0]:.2f}, y={position[1]:.2f}, z={position[2]:.2f}")
 
         ui.update_view(frame, trajectory, position)
-        
+
         prev_frame = frame
         prev_kp, prev_des = kp, des
 
