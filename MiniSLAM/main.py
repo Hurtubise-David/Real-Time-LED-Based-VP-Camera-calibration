@@ -4,3 +4,7 @@ from pose_estimation import estimate_pose_essential
 import numpy as np
 import cv2
 
+
+def main():
+    camera = StereoCamera()
+    tracker = ORBTracker()
