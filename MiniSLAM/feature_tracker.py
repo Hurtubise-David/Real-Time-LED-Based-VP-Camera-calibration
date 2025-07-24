@@ -22,7 +22,7 @@ class ORBTracker:
         keypoints, descriptors = self.orb.detectAndCompute(image, None)
         return keypoints, descriptors            
 
-    def match(self, kp1, des1, kp2, des2, ratio=0.75):
+    def match(self, kp1, des1, kp2, des2, ratio=0.6):
         """
         Matche les descripteurs entre deux frames avec le ratio test
         :param kp1: keypoints image t-1
