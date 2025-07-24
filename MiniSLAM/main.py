@@ -1,6 +1,7 @@
 from camera_stereo import StereoCamera
 from feature_tracker import ORBTracker
 from pose_estimation import estimate_pose_essential
+from visualization import Visualizer
 import numpy as np
 import cv2
 
