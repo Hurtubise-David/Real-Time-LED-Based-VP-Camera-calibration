@@ -23,6 +23,10 @@ class Visualizer:
         self.image_label.pack(fill=tk.BOTH, expand=True)
 
         # Matches label
+        self.matches_label = tk.Label(self.root)
+        self.matches_label.pack(side=tk.LEFT, padx=5, pady=5)
+
+        # Ransac label
         self.ransac_label = tk.Label(self.root)
         self.ransac_label.pack(side=tk.RIGHT, padx=5, pady=5)
 
