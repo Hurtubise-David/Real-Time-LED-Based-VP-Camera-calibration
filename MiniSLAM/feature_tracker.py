@@ -21,3 +21,26 @@ Class ORBTracker:
         """
         keypoints, descriptors = self.orb.detectAndCompute(image, None)
         return keypoints, descriptors            
+
+    def match(self, kp1, des1, kp2, des2, ratio=0.75):
+        """
+        Matche les descripteurs entre deux frames avec le ratio test
+        :param kp1: keypoints image t-1
+        :param des1: descripteurs t-1
+        :param kp2: keypoints image t
+        :param des2: descripteurs t
+        :return: matches filtrés, pts1, pts2
+        """
+        matches = self.matcher.knnMatch(des1, des2, k=2)
+
+        good_matches = []
+        pts1 = []
+        pts2 = []
+
+        for m, n in matches:
+            if m.distance < ratio * n.distance:
+                good_matches.append(m)
+                pts1.append(kp1[m.queryIdx].pt)
+                pts2.append(kp2[m.trainIdx].pt)
+
+        return good_matches, np.array(pts1), np.array(pts2)
