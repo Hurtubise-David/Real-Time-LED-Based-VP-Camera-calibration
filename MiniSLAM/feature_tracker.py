@@ -37,9 +37,11 @@ class ORBTracker:
         pts1 = []
         pts2 = []
 
-        for m, n in matches:
-            if len(m, n) != 2:
+        for m_n in matches:
+            if len(m_n) != 2:
                 continue  # on saute les cas où il n'y a pas 2 matches
+
+            m, n = m_n 
 
             if m.distance < ratio * n.distance:
                 good_matches.append(m)
