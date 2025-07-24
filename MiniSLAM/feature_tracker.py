@@ -54,4 +54,22 @@ class ORBTracker:
 
         return good_matches, np.array(pts1), np.array(pts2)
     
+    def set_parameters(self, ratio, nfeatures, checks):
+        self.orb = cv2.ORB_create(nfeatures=nfeatures)
+        index_params = dict(algorithm=6,
+                            table_number=6,
+                            key_size=12,
+                            multi_probe_level=1)
+        search_params = dict(checks=int(checks))
+        self.matcher = cv2.FlannBasedMatcher(index_params, search_params)
+        self.ratio = ratio
+
+    def draw_matches(self, img1, kp1, img2, kp2, matches):
+        return cv2.drawMatches(img1, kp1, img2, kp2, matches, None,
+                            flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+
+    def draw_inlier_matches(self, img1, kp1, img2, kp2, matches, mask):
+        inlier_matches = [m for i, m in enumerate(matches) if mask[i]]
+        return self.draw_matches(img1, kp1, img2, kp2, inlier_matches)
+    
     
