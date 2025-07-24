@@ -5,3 +5,34 @@ import numpy as np
 import threading
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+class Visualizer:
+    def __init__(self, reset_callback):
+        self.root = tk.Tk()
+        self.root.title("Mini Visual Odometry UI")
+
+        # Position label
+        self.position_var = tk.StringVar()
+        self.position_label = ttk.Label(self.root, textvariable=self.position_var, font=("Helvetica", 14))
+        self.position_label.pack(pady=10)
+
+        # Reset button
+        self.reset_button = ttk.Button(self.root, text="Reset Camera Pose", command=reset_callback)
+        self.reset_button.pack(pady=5)
+
+        # Matplotlib 3D plot for trajectory
+        self.fig = plt.Figure(figsize=(5, 4), dpi=100)
+        self.ax = self.fig.add_subplot(111, projection='3d')
+        self.ax.set_title("Camera Trajectory")
+        self.ax.set_xlabel("X")
+        self.ax.set_ylabel("Y")
+        self.ax.set_zlabel("Z")
+
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)
+        self.canvas.get_tk_widget().pack()
+
+        # Video window (OpenCV in another thread)
+        self.frame = None
+        self.video_thread = threading.Thread(target=self._video_loop, daemon=True)
+        self.video_thread.start()
+

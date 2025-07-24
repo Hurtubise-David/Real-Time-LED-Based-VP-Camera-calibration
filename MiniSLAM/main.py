@@ -16,6 +16,7 @@ def main():
     prev_kp, prev_des = tracker.detect(prev_frame)
 
     while True:
+
         frame = camera.get_left_frame()
         if frame is None:
             continue
