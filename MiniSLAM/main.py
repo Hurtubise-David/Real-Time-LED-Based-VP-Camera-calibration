@@ -78,7 +78,7 @@ def main():
                 prev_kp, prev_des = kp, des
 
             # pour éviter de boucler trop vite
-            ctime.sleep(0.01)  
+            time.sleep(0.01)  
         
     # Lancer dans un thread
     threading.Thread(target=update, daemon=True).start()
