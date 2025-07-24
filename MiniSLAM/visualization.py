@@ -74,7 +74,7 @@ class Visualizer:
         if hasattr(self, "param_callback"):
             self.param_callback(self.ratio.get(), self.nfeatures.get(), self.checks.get())
 
-    def update_view(self, frame, trajectory, position):
+    def update_view(self, frame, trajectory, position, matches_img=None, ransac_img=None):
         self.frame = frame
         self.trajectory = trajectory
         self.position = position
