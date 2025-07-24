@@ -43,3 +43,25 @@ class Visualizer:
                 if cv2.waitKey(1) & 0xFF == 27:
                     break
         cv2.destroyAllWindows()
+
+    def update_view(self, frame, trajectory, position):
+        # Update video frame
+        self.frame = frame
+
+        # Update position text
+        x, y, z = position
+        self.position_var.set(f"Position → X: {x:.2f}, Y: {y:.2f}, Z: {z:.2f}")
+
+        # Update trajectory plot
+        self.ax.cla()
+        self.ax.set_title("Camera Trajectory")
+        self.ax.set_xlabel("X")
+        self.ax.set_ylabel("Y")
+        self.ax.set_zlabel("Z")
+
+        if len(trajectory) > 0:
+            traj = np.array(trajectory)
+            self.ax.plot(traj[:, 0], traj[:, 1], traj[:, 2], 'b-')
+
+        self.canvas.draw()
+    
