@@ -8,3 +8,5 @@ import cv2
 def main():
     camera = StereoCamera()
     tracker = ORBTracker()
+
+    pose = np.eye(4) # Matrice 4x4 de la pose cumulée (monde → caméra)
