@@ -53,6 +53,7 @@ class Visualizer:
 
     def update_tk(self):
         if self.frame is not None:
+            # Conversion BGR -> RGB -> PhotoImage
             img_rgb = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
             img_pil = Image.fromarray(img_rgb)
             img_tk = ImageTk.PhotoImage(image=img_pil)
