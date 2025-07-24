@@ -106,7 +106,7 @@ class Visualizer:
             self.fps_label.config(text=f"FPS: {self.current_fps:.2f}")
 
         self.update_matches_window()
-        self.root.after(10, self.update_tk)
+        self.root.after(15, self.update_tk)
 
     def open_matches_window(self):
         if self.matches_window is None or not tk.Toplevel.winfo_exists(self.matches_window):
