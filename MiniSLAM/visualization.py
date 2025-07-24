@@ -10,7 +10,7 @@ class Visualizer:
 
         # Création de la fenêtre tkinter
         self.root = tk.Tk()
-        self.root.title("Visual Odometry UI")
+        self.root.title("MiniSLAM")
 
         # Vue caméra
         self.image_label = tk.Label(self.root)
