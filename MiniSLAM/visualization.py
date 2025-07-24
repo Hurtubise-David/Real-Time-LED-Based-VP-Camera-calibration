@@ -16,7 +16,7 @@ class Visualizer:
 
         # Vue caméra
         self.image_label = tk.Label(self.root)
-        self.image_label.pack()
+        self.image_label.pack(fill=tk.BOTH, expand=True)
 
         # Coordonnées X, Y, Z
         self.position_label = ttk.Label(self.root, text="Position: x=0.00, y=0.00, z=0.00", font=("Arial", 14))
@@ -46,7 +46,6 @@ class Visualizer:
 
     def update_tk(self):
         if self.frame is not None:
-            # Conversion BGR -> RGB -> PhotoImage
             img_rgb = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
             img_pil = Image.fromarray(img_rgb)
             img_tk = ImageTk.PhotoImage(image=img_pil)
@@ -54,9 +53,11 @@ class Visualizer:
             self.image_label.imgtk = img_tk
             self.image_label.configure(image=img_tk)
 
-            # Affichage position
             x, y, z = self.position
             self.position_label.config(text=f"Position: x={x:.2f}, y={y:.2f}, z={z:.2f}")
+
+            # Forcer le rafraîchissement de l'UI
+            self.root.update_idletasks()
 
         self.root.after(10, self.update_tk)
 

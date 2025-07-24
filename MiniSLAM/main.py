@@ -6,18 +6,14 @@ import numpy as np
 import cv2
 
 # Variables globales
-pose = np.eye(4)  # Matrice 4x4 de la pose cumulée (monde → caméra)
+pose = np.eye(4)
 trajectory = []
 
-# Callback pour reset
 def reset_pose():
     global pose, trajectory
     pose = np.eye(4)
     trajectory = []
     print("Camera pose reset to (0, 0, 0)")
-
-# Lancer la UI
-ui = Visualizer(reset_callback=reset_pose)
 
 def main():
     global pose, trajectory
@@ -25,52 +21,45 @@ def main():
     camera = StereoCamera()
     tracker = ORBTracker()
 
-    prev_frame = camera.get_left_frame()
+    # Attendre une première image valide
+    prev_frame = None
+    while prev_frame is None:
+        prev_frame = camera.get_left_frame()
+
     prev_kp, prev_des = tracker.detect(prev_frame)
 
-    while prev_frame is None:
-        prev_frame = camera.get_left_frame()  # Attendre une image valide
+    ui = Visualizer(reset_callback=reset_pose)
 
-    def main_loop():
-        global pose, trajectory
+    def update():
         nonlocal prev_frame, prev_kp, prev_des
-
         frame = camera.get_left_frame()
-        if frame is None:
-            ui.root.after(10, main_loop)
-            return
+        if frame is not None:
+            kp, des = tracker.detect(frame)
+            matches, pts1, pts2 = tracker.match(prev_kp, prev_des, kp, des)
 
-        kp, des = tracker.detect(frame)
-        matches, pts1, pts2 = tracker.match(prev_kp, prev_des, kp, des)
+            position = np.array([0.0, 0.0, 0.0])
+            if len(pts1) >= 6:
+                R, t = estimate_pose_essential(pts1, pts2, camera.K)
+                if R is not None and t is not None:
+                    T = np.eye(4)
+                    T[:3, :3] = R
+                    T[:3, 3] = t.flatten()
+                    pose[:] = pose @ np.linalg.inv(T)
+                    position = pose[:3, 3]
+                    trajectory.append(position)
+                    print(f"Position: x={position[0]:.2f}, y={position[1]:.2f}, z={position[2]:.2f}")
 
-        position = np.array([0.0, 0.0, 0.0])  # Valeur par défaut
+            ui.update_view(frame, trajectory, position)
+            prev_frame = frame
+            prev_kp, prev_des = kp, des
 
-        if len(pts1) >= 6:
-            R, t = estimate_pose_essential(pts1, pts2, camera.K)
-            if R is not None and t is not None:
-                T = np.eye(4)
-                T[:3, :3] = R
-                T[:3, 3] = t.flatten()
+        ui.root.after(1, update)
 
-                pose = pose @ np.linalg.inv(T)  # Accumulation de la pose
-                position = pose[:3, 3]
-                trajectory.append(position)
-
-                print(f"Position: x={position[0]:.2f}, y={position[1]:.2f}, z={position[2]:.2f}")
-
-        ui.update_view(frame, trajectory, position)
-
-        prev_frame = frame
-        prev_kp, prev_des = kp, des
-
-        ui.root.after(1, main_loop)
-
-    ui.root.after(1, main_loop)
+    ui.root.after(1, update)
     ui.run()
 
     camera.release()
     np.savetxt("trajectory.txt", np.array(trajectory))
-
 
 if __name__ == "__main__":
     main()
