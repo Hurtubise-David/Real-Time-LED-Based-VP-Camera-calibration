@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import cv2
+import time
 from PIL import Image, ImageTk
 import numpy as np
 
