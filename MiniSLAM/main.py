@@ -69,7 +69,6 @@ def main():
                     print(f"Position: x={position[0]:.2f}, y={position[1]:.2f}, z={position[2]:.2f}")
 
             shared_state["frame"] = frame
-            shared_state["trajectory"] = trajectory.copy()
             shared_state["position"] = position
             shared_state["matches_img"] = matches_img
             shared_state["ransac_img"] = ransac_img
