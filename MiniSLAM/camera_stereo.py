@@ -17,3 +17,19 @@ class StereoCamera:
         self.K = np.array([[640, 0, 320],
                            [0, 640, 240],
                            [0,   0,   1]], dtype=np.float32)
+
+    def get_frames(self):
+        """
+        Capture une image combinée et la découpe en deux (gauche/droite)
+        :return: (frame_left, frame_right)
+        """
+        ret, frame = self.cap.read()
+        if not ret:
+            return None, None
+
+        h, w, _ = frame.shape
+        w_half = w // 2
+        frame_left = frame[:, :w_half]
+        frame_right = frame[:, w_half:]
+
+        return frame_left, frame_right
