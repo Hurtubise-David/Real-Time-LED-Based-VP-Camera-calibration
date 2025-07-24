@@ -6,8 +6,9 @@ from PIL import Image, ImageTk
 import numpy as np
 
 class Visualizer:
-    def __init__(self, reset_callback=None):
+    def __init__(self, reset_callback=None, shared_state=None):
         self.reset_callback = reset_callback
+        self.shared_state = shared_state
 
         self.frame = None
         self.trajectory = []
