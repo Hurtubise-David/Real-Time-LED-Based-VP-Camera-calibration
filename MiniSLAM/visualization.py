@@ -11,6 +11,8 @@ class Visualizer:
         # Création de la fenêtre tkinter
         self.root = tk.Tk()
         self.root.title("MiniSLAM")
+        self.root.geometry("800x600")  # taille initiale
+        self.root.minsize(640, 480)    # taille minimale
 
         # Vue caméra
         self.image_label = tk.Label(self.root)
