@@ -28,6 +28,9 @@ def main():
     prev_frame = camera.get_left_frame()
     prev_kp, prev_des = tracker.detect(prev_frame)
 
+    while prev_frame is None:
+        prev_frame = camera.get_left_frame()  # Attendre une image valide
+
     def main_loop():
         global pose, trajectory
         nonlocal prev_frame, prev_kp, prev_des
