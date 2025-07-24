@@ -22,6 +22,10 @@ class Visualizer:
         self.image_label = tk.Label(self.root)
         self.image_label.pack(fill=tk.BOTH, expand=True)
 
+        # Matches label
+        self.ransac_label = tk.Label(self.root)
+        self.ransac_label.pack(side=tk.RIGHT, padx=5, pady=5)
+
         # Coordonnées X, Y, Z
         self.position_label = ttk.Label(self.root, text="Position: x=0.00, y=0.00, z=0.00", font=("Arial", 14))
         self.position_label.pack(pady=10)
@@ -99,6 +103,20 @@ class Visualizer:
 
             # Forcer le rafraîchissement de l'UI
             self.root.update_idletasks()
+
+        if self.matches_img is not None:
+            img_rgb = cv2.cvtColor(self.matches_img, cv2.COLOR_BGR2RGB)
+            img_pil = Image.fromarray(img_rgb)
+            img_tk = ImageTk.PhotoImage(image=img_pil)
+            self.matches_label.imgtk = img_tk
+            self.matches_label.configure(image=img_tk)
+
+        if self.ransac_img is not None:
+            img_rgb = cv2.cvtColor(self.ransac_img, cv2.COLOR_BGR2RGB)
+            img_pil = Image.fromarray(img_rgb)
+            img_tk = ImageTk.PhotoImage(image=img_pil)
+            self.ransac_label.imgtk = img_tk
+            self.ransac_label.configure(image=img_tk)
 
         self.root.after(10, self.update_tk)
 
