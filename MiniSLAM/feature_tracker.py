@@ -12,5 +12,12 @@ Class ORBTracker:
                             multi_probe_level=1)
         search_params = dict(checks=50)
         self.matcher = cv2.FlannBasedMatcher(index_params, search_params)
-        
-            
+
+    def detect(self, image):
+        """
+        Détecte les keypoints et calcule les descripteurs ORB
+        :param image: image (gauche) actuelle
+        :return: keypoints, descripteurs
+        """
+        keypoints, descriptors = self.orb.detectAndCompute(image, None)
+        return keypoints, descriptors            
