@@ -3,7 +3,7 @@ import numpy as np
 
 
 class StereoCamera:
-    def __init__(self, camera_id=0, width=1280, height=480, fps=60)
+    def __init__(self, camera_id=5, width=1280, height=480, fps=60):
         """
         Initialise une caméra stéréo avec flux côte à côte (ELP).
         :param camera_id: index de la caméra combinée
@@ -40,3 +40,4 @@ class StereoCamera:
 
     def release(self):
         self.cap.release()
+
