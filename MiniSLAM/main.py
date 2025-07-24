@@ -42,3 +42,11 @@ def main():
         # ESC pour quitter
         if cv2.waitKey(1) & 0xFF == 27:
             break
+
+    camera.release()
+
+    # Sauvegarde de la trajectoire pour visualisation
+    np.savetxt("trajectory.txt", np.array(trajectory))
+
+if __name__ == "__main__":
+    main()
