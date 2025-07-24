@@ -22,3 +22,16 @@ def main():
 
         kp, des = tracker.detect(frame)
         matches, pts1, pts2 = tracker.match(prev_kp, prev_des, kp, des)
+
+        if len(pts1) >= 6:
+                    R, t = estimate_pose_essential(pts1, pts2, camera.K)
+                    if R is not None and t is not None:
+                        T = np.eye(4)
+                        T[:3, :3] = R
+                        T[:3, 3] = t.flatten()
+
+                        pose = pose @ np.linalg.inv(T)  # composition (accumulation)
+                        position = pose[:3, 3]
+                        trajectory.append(position)
+
+                        print(f"Position: x={position[0]:.2f}, y={position[1]:.2f}, z={position[2]:.2f}")
