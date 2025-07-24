@@ -64,4 +64,7 @@ class Visualizer:
             self.ax.plot(traj[:, 0], traj[:, 1], traj[:, 2], 'b-')
 
         self.canvas.draw()
+
+    def start(self):
+        self.root.mainloop()
     
