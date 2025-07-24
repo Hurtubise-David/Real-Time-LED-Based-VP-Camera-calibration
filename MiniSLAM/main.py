@@ -6,9 +6,14 @@ import numpy as np
 import cv2
 import threading
 
-# Variables globales
-pose = np.eye(4)
-trajectory = []
+shared_state = {
+    "pose": np.eye(4),
+    "trajectory": [],
+    "frame": None,
+    "position": np.array([0.0, 0.0, 0.0]),
+    "matches_img": None,
+    "ransac_img": None
+}
 
 def reset_pose():
     global pose, trajectory
@@ -68,7 +73,7 @@ def main():
             prev_frame = frame
             prev_kp, prev_des = kp, des
 
-        ui.root.after(1, update)
+        
     # Lancer dans un thread
     threading.Thread(target=update, daemon=True).start()
     ui.run()
