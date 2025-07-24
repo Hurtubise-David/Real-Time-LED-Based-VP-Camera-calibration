@@ -64,6 +64,13 @@ class Visualizer:
             x, y, z = self.position
             self.position_label.config(text=f"Position: x={x:.2f}, y={y:.2f}, z={z:.2f}")
 
+            # FPS calculation
+            now = time.time()
+            if self.last_time is not None:
+                self.current_fps = 1.0 / (now - self.last_time)
+            self.last_time = now
+            self.fps_label.config(text=f"FPS: {self.current_fps:.2f}")
+
             # Forcer le rafraîchissement de l'UI
             self.root.update_idletasks()
 
