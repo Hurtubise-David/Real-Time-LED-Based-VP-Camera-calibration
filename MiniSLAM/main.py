@@ -14,3 +14,11 @@ def main():
 
     prev_frame = camera.get_left_frame()
     prev_kp, prev_des = tracker.detect(prev_frame)
+
+    while True:
+        frame = camera.get_left_frame()
+        if frame is None:
+            continue
+
+        kp, des = tracker.detect(frame)
+        matches, pts1, pts2 = tracker.match(prev_kp, prev_des, kp, des)
