@@ -72,4 +72,22 @@ class ORBTracker:
         inlier_matches = [m for i, m in enumerate(matches) if mask[i]]
         return self.draw_matches(img1, kp1, img2, kp2, inlier_matches)
     
-    
+    def filter_with_ransac(self, pts1, pts2, K):
+        """
+        Filtre les correspondances avec la méthode RANSAC sur la matrice essentielle.
+        :param pts1: points de l'image 1 (Nx2)
+        :param pts2: points de l'image 2 (Nx2)
+        :param K: matrice intrinsèque de la caméra
+        :return: inliers1, inliers2, mask (mask est booléen pour les matches valides)
+        """
+        if len(pts1) < 5 or len(pts2) < 5:
+            return pts1, pts2, None  # pas assez de points
+
+        E, mask = cv2.findEssentialMat(pts1, pts2, K, method=cv2.RANSAC, prob=0.999, threshold=1.0)
+
+        if E is None or mask is None:
+            return pts1, pts2, None
+
+        inliers1 = pts1[mask.ravel() == 1]
+        inliers2 = pts2[mask.ravel() == 1]
+        return inliers1, inliers2, mask.ravel().astype(bool)
