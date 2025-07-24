@@ -31,6 +31,9 @@ class ORBTracker:
         :param des2: descripteurs t
         :return: matches filtrés, pts1, pts2
         """
+        if des1 is None or des2 is None or len(des1) < 2 or len(des2) < 2:
+            return [], np.array([]), np.array([])  # aucun match possible
+    
         matches = self.matcher.knnMatch(des1, des2, k=2)
 
         good_matches = []
