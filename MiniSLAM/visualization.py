@@ -74,6 +74,8 @@ class Visualizer:
         self.frame = frame
         self.trajectory = trajectory
         self.position = position
+        self.matches_img = matches_img
+        self.ransac_img = ransac_img
 
     def update_tk(self):
         if self.frame is not None:
