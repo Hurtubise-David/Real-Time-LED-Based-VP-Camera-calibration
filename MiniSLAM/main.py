@@ -35,6 +35,8 @@ def main():
         kp, des = tracker.detect(frame)
         matches, pts1, pts2 = tracker.match(prev_kp, prev_des, kp, des)
 
+        position = np.array([0.0, 0.0, 0.0])  # <- définir une valeur par défaut avant l'affichage
+
         if len(pts1) >= 6:
                     R, t = estimate_pose_essential(pts1, pts2, camera.K)
                     if R is not None and t is not None:
