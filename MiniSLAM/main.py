@@ -30,12 +30,26 @@ def main():
 
     ui = Visualizer(reset_callback=reset_pose)
 
+    def update_tracker_params(ratio, nfeatures, checks):
+        tracker.set_parameters(ratio, int(nfeatures), int(checks))
+
+    ui.set_param_callback(update_tracker_params)
+
     def update():
         nonlocal prev_frame, prev_kp, prev_des
         frame = camera.get_left_frame()
         if frame is not None:
             kp, des = tracker.detect(frame)
             matches, pts1, pts2 = tracker.match(prev_kp, prev_des, kp, des)
+
+            pts1_np = np.array(pts1)
+            pts2_np = np.array(pts2)
+            matches_img = tracker.draw_matches(prev_frame, prev_kp, frame, kp, matches)
+            inliers1, inliers2, ransac_mask = tracker.filter_with_ransac(pts1_np, pts2_np, camera.K)
+            if ransac_mask is not None:
+                ransac_img = tracker.draw_inlier_matches(prev_frame, prev_kp, frame, kp, matches, ransac_mask)
+            else:
+                ransac_img = matches_img.copy()
 
             position = np.array([0.0, 0.0, 0.0])
             if len(pts1) >= 6:
@@ -49,7 +63,7 @@ def main():
                     trajectory.append(position)
                     print(f"Position: x={position[0]:.2f}, y={position[1]:.2f}, z={position[2]:.2f}")
 
-            ui.update_view(frame, trajectory, position)
+            ui.update_view(frame, trajectory, position, matches_img, ransac_img)
             prev_frame = frame
             prev_kp, prev_des = kp, des
 
