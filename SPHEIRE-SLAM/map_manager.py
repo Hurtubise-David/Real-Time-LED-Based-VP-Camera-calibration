@@ -46,6 +46,12 @@ class MapManager:
     def add_keyframe(self, keyframe):
         self.keyframes.append(keyframe)
         return len(self.keyframes) - 1
+    
+    def reset(self):
+        self.keyframes.clear()
+        self.mappoints.clear()
+        self.next_kf_id = 0
+        self.next_mp_id = 0
 
     def add_mappoint(self, mappoint):
         self.map_points.append(mappoint)
