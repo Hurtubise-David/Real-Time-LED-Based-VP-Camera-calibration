@@ -63,6 +63,16 @@ def main():
 
                 inliers1, inliers2, ransac_mask = tracker.filter_with_ransac(pts1_np, pts2_np, camera.K_left)
 
+                # === Ajout d'un keyframe ===
+                kf = Keyframe(
+                    frame_id=frame_id,
+                    pose=shared_state["pose"].copy(),  # On copie pour éviter les références
+                    keypoints=kp_left,
+                    descriptors=des_left
+                )
+                kf_id = map_manager.add_keyframe(kf)
+                frame_id += 1
+
 
                 # === Triangulation stéréo (frame_left vs frame_right) ===
                 kp_r, des_r = tracker.detect(frame_right)
@@ -116,23 +126,13 @@ def main():
                         shared_state["trajectory"].append(position)
                         print(f"Position: x={position[0]:.2f}, y={position[1]:.2f}, z={position[2]:.2f}")
 
-                # === Ajout d'un keyframe ===
-                kf = Keyframe(
-                    frame_id=frame_id,
-                    pose=shared_state["pose"].copy(),  # On copie pour éviter les références
-                    keypoints=kp_left,
-                    descriptors=des_left
-                )
-                kf_id = map_manager.add_keyframe(kf)
-                frame_id += 1
-
                 # === UI update ===
                 shared_state["frame"] = frame_left
                 shared_state["position"] = position
                 shared_state["matches_img"] = matches_img
                 shared_state["ransac_img"] = ransac_img
                 shared_state["map_points"] = map_manager.get_valid_mappoints()
-                
+
                 prev_frame = frame_left
                 prev_kp, prev_des = kp_left, des_left
 
