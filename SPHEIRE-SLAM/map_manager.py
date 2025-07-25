@@ -1,14 +1,17 @@
 import numpy as np
 
 class MapPoint:
+
+    #Représente un point 3D triangulé dans l'espace monde.
+    
     def __init__(self, position, descriptor=None):
-        self.position = np.array(position, dtype=np.float32)  # shape (3,)
-        self.descriptor = descriptor
-        self.observations = {}  # key: keyframe_id, value: keypoint_idx
+        self.position = np.array(position, dtype=np.float32)  # Coordonnées 3D [X, Y, Z]
+        self.descriptor = descriptor  # Descripteur ORB associé (pour association)
+        self.observations = {}  # Liste des keyframes et points d'image où ce point a été observé
         self.is_valid = True
 
     def add_observation(self, keyframe_id, keypoint_idx):
-        self.observations[keyframe_id] = keypoint_idx
+        self.observations[keyframe_id] = keypoint_idx # Associe ce point à une keyframe et un index de keypoint (dans cette image).
 
     def remove_observation(self, keyframe_id):
         if keyframe_id in self.observations:
@@ -16,6 +19,9 @@ class MapPoint:
 
 
 class Keyframe:
+
+    # Représente une image clé avec sa pose et ses points détectés.
+
     def __init__(self, frame_id, pose, keypoints, descriptors):
         self.frame_id = frame_id
         self.pose = pose  # 4x4 matrix de transformation
