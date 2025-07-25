@@ -103,7 +103,7 @@ def main():
                         for i, pt in enumerate(points_world):
                             if np.isfinite(pt).all():
                                 try:
-                                    descriptor = des_left[matches_stereo[inliersL[i]].queryIdx]
+                                    descriptor = des_left[matches_stereo[inliersL[i].item()].queryIdx]
                                 except IndexError:
                                     descriptor = None  # fallback
                                 mp = MapPoint(position=pt, descriptor=descriptor)
