@@ -11,3 +11,8 @@ class PoseEdge:
         self.to_id = to_id
         self.relative_pose = relative_pose  # 4x4 relative transformation
         self.information = information      # 6x6 information matrix (optional for now)
+
+class PoseGraph:
+    def __init__(self):
+        self.nodes = {}  # key: frame_id, value: PoseNode
+        self.edges = []  # list of PoseEdge
