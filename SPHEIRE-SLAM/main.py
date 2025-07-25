@@ -15,6 +15,7 @@ shared_state = {
     "position": np.array([0.0, 0.0, 0.0]),
     "matches_img": None,
     "ransac_img": None
+    "map_points": []  
 }
 
 def reset_pose():
@@ -62,9 +63,6 @@ def main():
                     
                     points_3d = triangulate_points(np.array(inliers1), np.array(inliers2), P_left, P_right)
                     
-                    # Debug affichage d'un point 3D
-                    if len(points_3d) > 0:
-                        print("Exemple point 3D:", points_3d[0])
 
                 if ransac_mask is not None:
                     ransac_img = tracker.draw_inlier_matches(prev_frame, prev_kp, frame, kp, matches, ransac_mask)
