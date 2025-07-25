@@ -16,7 +16,8 @@ shared_state = {
     "position": np.array([0.0, 0.0, 0.0]),
     "matches_img": None,
     "ransac_img": None,
-    "map_points": []  
+    "map_points": [],
+    "frame_id": 0  
 }
 
 map_manager = MapManager()  # Gestionnaire central de la carte 3D
