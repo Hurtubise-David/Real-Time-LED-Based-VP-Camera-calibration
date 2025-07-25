@@ -65,13 +65,13 @@ def main():
 
                 # === Ajout d'un keyframe ===
                 kf = Keyframe(
-                    frame_id=frame_id,
+                    frame_id=shared_state["frame_id"],
                     pose=shared_state["pose"].copy(),  # On copie pour éviter les références
                     keypoints=kp_left,
                     descriptors=des_left
                 )
                 kf_id = map_manager.add_keyframe(kf)
-                frame_id += 1
+                shared_state["frame_id"] += 1
 
 
                 # === Triangulation stéréo (frame_left vs frame_right) ===
