@@ -19,6 +19,9 @@ shared_state = {
     "map_points": []  
 }
 
+map_manager = MapManager()  # Gestionnaire central de la carte 3D
+frame_id = 0  # Identifiant unique pour les images clés (keyframes)
+
 def reset_pose():
     shared_state["pose"] = np.eye(4)
     shared_state["trajectory"] = []
@@ -108,6 +111,16 @@ def main():
                         position = shared_state["pose"][:3, 3]
                         shared_state["trajectory"].append(position)
                         print(f"Position: x={position[0]:.2f}, y={position[1]:.2f}, z={position[2]:.2f}")
+
+                # === Ajout d'un keyframe ===
+                kf = Keyframe(
+                    frame_id=frame_id,
+                    pose=shared_state["pose"].copy(),  # On copie pour éviter les références
+                    keypoints=kp_left,
+                    descriptors=des_left
+                )
+                kf_id = map_manager.add_keyframe(kf)
+                frame_id += 1
 
                 # === UI update ===
                 shared_state["frame"] = frame_left
