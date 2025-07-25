@@ -160,6 +160,7 @@ class Visualizer:
             if len(map_points) > 0 or len(pose_graph["edges"]) > 0:
                 img = np.zeros((600, 600, 3), dtype=np.uint8)
 
+                # === Dessiner les MapPoints ===
                 for pt in map_points:
                     try:
                         x, y, z = pt
@@ -169,6 +170,21 @@ class Visualizer:
                             cv2.circle(img, (u, v), 1, (0, 255, 0), -1)
                     except:
                         pass
+
+                # === Dessiner les arêtes du graphe de poses ===
+                nodes = pose_graph.get("nodes", [])
+                edges = pose_graph.get("edges", [])
+
+                for (a, b) in edges:
+                    if a < len(nodes) and b < len(nodes):
+                        try:
+                            x1, y1, z1 = nodes[a]
+                            x2, y2, z2 = nodes[b]
+                            u1, v1 = int(300 + x1 * 30), int(300 - y1 * 30)
+                            u2, v2 = int(300 + x2 * 30), int(300 - y2 * 30)
+                            cv2.line(img, (u1, v1), (u2, v2), (0, 165, 255), 1)  # orange
+                        except:
+                            pass    
 
                 img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                 img_pil = Image.fromarray(img_rgb)
