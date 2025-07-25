@@ -102,11 +102,15 @@ def main():
                         # 5. Ajouter les MapPoints à la carte SLAM (MapManager)
                         for i, pt in enumerate(points_world):
                             if np.isfinite(pt).all():
-                                mp = MapPoint(position=pt, descriptor=des_left[i])  # Descripteur associé
+                                try:
+                                    descriptor = des_left[matches_stereo[inliersL[i]].queryIdx]
+                                except IndexError:
+                                    descriptor = None  # fallback
+                                mp = MapPoint(position=pt, descriptor=descriptor)
                                 mp_id = map_manager.add_mappoint(mp)
-                                kf.set_mappoint(i, mp_id)  # On lie ce keypoint à ce MapPoint
-                                mp.add_observation(kf_id, i)
-                    
+                                kf.set_mappoint(matches_stereo[inliersL[i]].queryIdx, mp_id)
+                                mp.add_observation(kf_id, matches_stereo[inliersL[i]].queryIdx)
+                                    
 
                 if ransac_mask is not None:
                     ransac_img = tracker.draw_inlier_matches(prev_frame, prev_kp, frame_left, kp_left, matches_mono, ransac_mask)
