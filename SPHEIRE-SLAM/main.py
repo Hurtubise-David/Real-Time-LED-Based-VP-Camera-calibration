@@ -77,6 +77,14 @@ def main():
                 kf_id = map_manager.add_keyframe(kf)
                 shared_state["frame_id"] += 1
 
+                # Ajouter un nœud au graphe
+                pose_graph.add_node(kf_id, shared_state["pose"].copy())
+
+                # Si on a déjà un keyframe précédent, ajouter une arête
+                if kf_id > 0:
+                    relative_pose = np.linalg.inv(map_manager.keyframes[kf_id - 1].pose) @ shared_state["pose"]
+                    pose_graph.add_edge(kf_id - 1, kf_id, relative_pose)
+
 
                 # === Triangulation stéréo (frame_left vs frame_right) ===
                 kp_r, des_r = tracker.detect(frame_right)
