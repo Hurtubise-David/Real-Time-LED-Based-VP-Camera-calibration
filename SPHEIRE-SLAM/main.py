@@ -4,6 +4,7 @@ from pose_estimation import estimate_pose_essential
 from visualization import Visualizer
 from triangulation import triangulate_points
 from map_manager import MapManager, Keyframe, MapPoint
+from pose_graph import PoseGraph
 import numpy as np
 import cv2
 import threading
