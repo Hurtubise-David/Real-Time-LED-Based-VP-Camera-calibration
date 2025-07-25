@@ -58,6 +58,11 @@ def main():
 
                 inliers1, inliers2, ransac_mask = tracker.filter_with_ransac(pts1_np, pts2_np, camera.K_left)
 
+
+                # === Triangulation stéréo (frame_left vs frame_right) ===
+                kp_r, des_r = tracker.detect(frame_right)
+                matches_stereo, ptsL, ptsR = tracker.match(kp_left, des_left, kp_r, des_r)
+
                 # Triangulation si on a assez d'inliers
                 if len(inliers1) >= 6 and len(inliers2) >= 6:
                     P_left = camera.K_left @ np.hstack((np.eye(3), np.zeros((3,1))))
