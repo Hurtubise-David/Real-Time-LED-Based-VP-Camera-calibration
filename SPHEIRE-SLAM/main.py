@@ -46,7 +46,7 @@ def main():
     def update():
         nonlocal prev_frame, prev_kp, prev_des
         while True:  # 🔁 Boucle infinie ici pour garder le thread en vie
-            frame = camera.get_left_frame()
+            frame_left, frame_right = camera.get_frames()
             if frame is not None:
                 kp, des = tracker.detect(frame)
                 matches, pts1, pts2 = tracker.match(prev_kp, prev_des, kp, des)
