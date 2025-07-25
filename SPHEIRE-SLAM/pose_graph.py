@@ -14,8 +14,9 @@ class PoseEdge:
 
 class PoseGraph:
     def __init__(self):
-        self.nodes = {}  # key: frame_id, value: PoseNode
-        self.edges = []  # liste de PoseEdge
+        self.nodes = []  # Liste d'IDs de keyframes
+        self.poses = []  # Liste de matrices 4x4
+        self.edges = []  # (i, j, relative_transform)
 
     def add_node(self, frame_id, pose):
         if frame_id not in self.nodes:
