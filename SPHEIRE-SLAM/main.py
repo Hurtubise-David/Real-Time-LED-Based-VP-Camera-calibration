@@ -86,7 +86,8 @@ def main():
                         points_world = (pose @ points_homogeneous).T[:, :3]  # shape (N, 3)
 
                         # 5. Ajouter à la carte
-                        shared_state.setdefault("map_points", []).extend(points_world)
+                        valid_points = [pt for pt in points_world if np.isfinite(pt).all()]
+                        shared_state.setdefault("map_points", []).extend(valid_points)
 
                         # Conversion en liste de points (filtrés)
                         for pt in points_world:
