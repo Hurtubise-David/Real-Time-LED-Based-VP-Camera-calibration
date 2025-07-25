@@ -86,7 +86,8 @@ def main():
                     relative_pose = np.linalg.inv(map_manager.keyframes[kf_id - 1].pose) @ shared_state["pose"]
                     pose_graph.add_edge(kf_id - 1, kf_id, relative_pose)
 
-                shared_state["pose_graph"] = pose_graph  # référence pour UI ou sauvegarde
+                shared_state["pose_graph"]["nodes"] = [T[:3, 3].tolist() for T in pose_graph.nodes]
+                shared_state["pose_graph"]["edges"] = [(a, b) for (a, b, _) in pose_graph.edges]
 
 
                 # === Triangulation stéréo (frame_left vs frame_right) ===
