@@ -22,6 +22,7 @@ shared_state = {
 }
 
 map_manager = MapManager()  # Gestionnaire central de la carte 3D
+pose_graph = PoseGraph()  # instancier le graphe global
 
 def reset_pose():
     shared_state["pose"] = np.eye(4)
