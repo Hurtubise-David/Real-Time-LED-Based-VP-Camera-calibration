@@ -150,6 +150,29 @@ class Visualizer:
                 self.ransac_label.imgtk = img_tk
                 self.ransac_label.configure(image=img_tk)
                 self.ransac_label.update_idletasks()
+
+    def update_map_window(self):
+        if self.map_window is not None and tk.Toplevel.winfo_exists(self.map_window):
+            map_points = self.shared_state.get("map_points", [])
+            if len(map_points) > 0:
+                img = np.zeros((600, 600, 3), dtype=np.uint8)
+
+                for pt in map_points:
+                    try:
+                        x, y, z = pt
+                        u = int(300 + x * 30)
+                        v = int(300 - y * 30)
+                        if 0 <= u < 600 and 0 <= v < 600:
+                            cv2.circle(img, (u, v), 1, (0, 255, 0), -1)
+                    except:
+                        pass
+
+                img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                img_pil = Image.fromarray(img_rgb)
+                img_tk = ImageTk.PhotoImage(image=img_pil)
+                self.map_canvas.imgtk = img_tk
+                self.map_canvas.configure(image=img_tk)
+        
     
     def draw_map_points(image, map_points):
         for pt in map_points:
