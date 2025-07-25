@@ -75,7 +75,7 @@ def main():
                     points_world = (pose @ points_homogeneous).T[:, :3]  # shape (N, 3)
 
                     # 5. Ajouter à la carte
-                    map_points.extend(points_world)
+                    shared_state.setdefault("map_points", []).extend(points_world)
 
                     # Conversion en liste de points (filtrés)
                     for pt in points_3d:
