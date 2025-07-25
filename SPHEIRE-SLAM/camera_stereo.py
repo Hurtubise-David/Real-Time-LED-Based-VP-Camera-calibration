@@ -14,7 +14,11 @@ class StereoCamera:
         self.cap.set(cv2.CAP_PROP_FPS, fps)
 
         # Paramètres de calibration fictifs (remplacer par réels plus tard)
-        self.K = np.array([[640, 0, 320],
+        self.K_left = np.array([[640, 0, 320],
+                           [0, 640, 240],
+                           [0,   0,   1]], dtype=np.float32)
+        
+        self.K_right = np.array([[640, 0, 320],
                            [0, 640, 240],
                            [0,   0,   1]], dtype=np.float32)
         
