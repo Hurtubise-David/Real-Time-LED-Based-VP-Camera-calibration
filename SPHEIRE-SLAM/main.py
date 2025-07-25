@@ -61,7 +61,7 @@ def main():
                 pts2_np = np.array(pts2)
                 matches_img = tracker.draw_matches(prev_frame, prev_kp, frame_left, kp_left, matches_mono)
 
-                inliers1, inliers2, ransac_mask = tracker.filter_with_ransac(pts1_np, pts2_np, camera.K_left)
+                inliers1, inliers2, ransac_mask, _ = tracker.filter_with_ransac(pts1_np, pts2_np, camera.K_left)
 
                 # === Ajout d'un keyframe ===
                 kf = Keyframe(
