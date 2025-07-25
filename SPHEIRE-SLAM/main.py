@@ -61,7 +61,21 @@ def main():
                     P_left = np.hstack((camera.K, np.zeros((3,1))))
                     P_right = camera.K @ np.hstack((camera.R, camera.T.reshape(3,1)))
                     
+                    # 1. Triangulation stéréo
                     points_3d = triangulate_points(np.array(inliers1), np.array(inliers2), P_left, P_right)
+
+                    # 2. Transformation des points dans le repère monde
+                    ones = np.ones((points_3d.shape[0], 1))
+                    points_homogeneous = np.hstack((points_3d, ones)).T  # shape (4, N)
+
+                    # 3. Obtenir la pose actuelle de la caméra (copie, pas référence)
+                    pose = shared_state["pose"].copy()  # (4, 4)
+
+                    # 4. Projeter dans le monde
+                    points_world = (pose @ points_homogeneous).T[:, :3]  # shape (N, 3)
+
+                    # 5. Ajouter à la carte
+                    map_points.extend(points_world)
 
                     # Conversion en liste de points (filtrés)
                     for pt in points_3d:
