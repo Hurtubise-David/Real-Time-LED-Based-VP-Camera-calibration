@@ -87,8 +87,8 @@ def main():
                     pose_graph.add_edge(kf_id - 1, kf_id, relative_pose)
 
                 # Mise à jour nodes et edges pour visualisation
-                shared_state["pose_graph"]["nodes"] = [T[:3, 3].tolist() for T in pose_graph.nodes]
-                shared_state["pose_graph"]["edges"] = [(a, b) for (a, b, _) in pose_graph.edges]
+                shared_state["pose_graph"]["nodes"] = [node.pose[:3, 3].tolist() for node in pose_graph.nodes.values()]
+                shared_state["pose_graph"]["edges"] = [(edge.from_id, edge.to_id) for edge in pose_graph.edges]
 
 
                 # === Triangulation stéréo (frame_left vs frame_right) ===

@@ -14,7 +14,7 @@ class PoseEdge:
 
 class PoseGraph:
     def __init__(self):
-        self.nodes = []  # Liste d'IDs de keyframes
+        self.nodes = {}  # dictionnaire {frame_id: PoseNode}
         self.poses = []  # Liste de matrices 4x4
         self.edges = []  # (i, j, relative_transform)
 
