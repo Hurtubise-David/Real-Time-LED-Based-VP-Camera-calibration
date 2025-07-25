@@ -18,7 +18,7 @@ class Visualizer:
         self.matches_window = None
 
         self.root = tk.Tk()
-        self.root.title("MiniSLAM")
+        self.root.title("VisualOdometry_v1")
         self.root.geometry("800x800")
         self.root.minsize(640, 480)
 
