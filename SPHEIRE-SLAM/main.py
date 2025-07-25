@@ -131,7 +131,8 @@ def main():
                 shared_state["position"] = position
                 shared_state["matches_img"] = matches_img
                 shared_state["ransac_img"] = ransac_img
-
+                shared_state["map_points"] = map_manager.get_valid_mappoints()
+                
                 prev_frame = frame_left
                 prev_kp, prev_des = kp_left, des_left
 
