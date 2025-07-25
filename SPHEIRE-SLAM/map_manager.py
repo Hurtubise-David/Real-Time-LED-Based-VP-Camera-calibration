@@ -35,6 +35,9 @@ class Keyframe:
     def set_mappoint(self, kp_idx, mp_idx):
         self.map_point_indices[kp_idx] = mp_idx
 
+    def get_linked_mappoints(self):
+        return [idx for idx in self.map_point_indices if idx != -1]
+
 class MapManager:
     def __init__(self):
         self.map_points = []
