@@ -110,6 +110,7 @@ class Visualizer:
             self.fps_label.config(text=f"FPS: {self.current_fps:.2f}")
 
         self.update_matches_window()
+        self.update_map_window()
         self.root.after(15, self.update_tk)
 
     def open_matches_window(self):
