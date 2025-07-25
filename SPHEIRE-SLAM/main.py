@@ -18,7 +18,8 @@ shared_state = {
     "matches_img": None,
     "ransac_img": None,
     "map_points": [],
-    "frame_id": 0  
+    "frame_id": 0,
+    "pose_graph": {"nodes": [], "edges": []}  
 }
 
 map_manager = MapManager()  # Gestionnaire central de la carte 3D
@@ -84,7 +85,7 @@ def main():
                 if kf_id > 0:
                     relative_pose = np.linalg.inv(map_manager.keyframes[kf_id - 1].pose) @ shared_state["pose"]
                     pose_graph.add_edge(kf_id - 1, kf_id, relative_pose)
-                    
+
                 shared_state["pose_graph"] = pose_graph  # référence pour UI ou sauvegarde
 
 
