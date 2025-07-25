@@ -124,6 +124,15 @@ class Visualizer:
             self.ransac_label = tk.Label(self.matches_window)
             self.ransac_label.pack(side=tk.RIGHT, padx=5, pady=5)
 
+    def open_map_window(self):
+        if self.map_window is None or not tk.Toplevel.winfo_exists(self.map_window):
+            self.map_window = tk.Toplevel(self.root)
+            self.map_window.title("Carte 3D (projection XY)")
+            self.map_window.geometry("600x600")
+
+            self.map_canvas = tk.Label(self.map_window)
+            self.map_canvas.pack(padx=5, pady=5)
+
     def update_matches_window(self):
         if self.matches_window is not None and tk.Toplevel.winfo_exists(self.matches_window):
             if self.matches_img is not None:
