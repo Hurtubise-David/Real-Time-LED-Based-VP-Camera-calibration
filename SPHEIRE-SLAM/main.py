@@ -21,6 +21,7 @@ shared_state = {
 def reset_pose():
     shared_state["pose"] = np.eye(4)
     shared_state["trajectory"] = []
+    shared_state["map_points"] = []
     print("Camera pose reset to (0, 0, 0)")
 
 def main():
