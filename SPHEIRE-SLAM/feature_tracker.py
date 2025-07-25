@@ -91,4 +91,4 @@ class ORBTracker:
         inliers1 = pts1[mask.ravel() == 1]
         inliers2 = pts2[mask.ravel() == 1]
         inlier_indices = np.where(mask.ravel() == 1)[0]
-        return inliers1, inliers2, mask.ravel().astype(bool)
+        return inliers1, inliers2, mask.ravel().astype(bool), inlier_indices

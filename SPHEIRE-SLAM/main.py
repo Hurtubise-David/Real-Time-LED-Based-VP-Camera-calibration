@@ -79,7 +79,7 @@ def main():
                 matches_stereo, ptsL, ptsR = tracker.match(kp_left, des_left, kp_r, des_r)
 
                 if len(ptsL) >= 6 and len(ptsR) >= 6:
-                    inliersL, inliersR, stereo_mask = tracker.filter_with_ransac(np.array(ptsL), np.array(ptsR), camera.K_left)
+                    inliersL, inliersR, stereo_mask, inl = tracker.filter_with_ransac(np.array(ptsL), np.array(ptsR), camera.K_left)
 
                     # Triangulation si on a assez d'inliers
                     if len(inliersL) >= 6:
