@@ -49,7 +49,7 @@ class MapManager:
     
     def reset(self):
         self.keyframes.clear()
-        self.mappoints.clear()
+        self.map_points.clear()
         self.next_kf_id = 0
         self.next_mp_id = 0
 
