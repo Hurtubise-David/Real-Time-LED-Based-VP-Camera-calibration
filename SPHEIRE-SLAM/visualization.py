@@ -155,6 +155,7 @@ class Visualizer:
     def update_map_window(self):
         if self.map_window is not None and tk.Toplevel.winfo_exists(self.map_window):
             map_points = self.shared_state.get("map_points", [])
+            pose_graph = self.shared_state.get("pose_graph", {"nodes": [], "edges": []})
             if len(map_points) > 0:
                 img = np.zeros((600, 600, 3), dtype=np.uint8)
 
