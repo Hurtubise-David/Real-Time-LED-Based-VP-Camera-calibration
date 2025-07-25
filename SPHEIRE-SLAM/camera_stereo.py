@@ -17,6 +17,10 @@ class StereoCamera:
         self.K = np.array([[640, 0, 320],
                            [0, 640, 240],
                            [0,   0,   1]], dtype=np.float32)
+        
+        # Baseline a charger de YAML To DOOOO : self.baseline = float(data["baseline"])
+        self.R = np.eye(3)
+        self.T = np.array([-self.baseline, 0, 0])  # translation droite par rapport à gauche        
 
     def get_frames(self):
         """
