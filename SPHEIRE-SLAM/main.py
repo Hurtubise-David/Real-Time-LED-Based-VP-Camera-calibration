@@ -14,7 +14,7 @@ shared_state = {
     "frame": None,
     "position": np.array([0.0, 0.0, 0.0]),
     "matches_img": None,
-    "ransac_img": None
+    "ransac_img": None,
     "map_points": []  
 }
 
@@ -62,6 +62,11 @@ def main():
                     P_right = camera.K @ np.hstack((camera.R, camera.T.reshape(3,1)))
                     
                     points_3d = triangulate_points(np.array(inliers1), np.array(inliers2), P_left, P_right)
+
+                    # Conversion en liste de points (filtrés)
+                    for pt in points_3d:
+                        if np.isfinite(pt).all():
+                            shared_state["map_points"].append(pt)
                     
 
                 if ransac_mask is not None:
