@@ -20,3 +20,7 @@ class PoseGraph:
     def add_node(self, frame_id, pose):
         if frame_id not in self.nodes:
             self.nodes[frame_id] = PoseNode(frame_id, pose)
+
+    def add_edge(self, from_id, to_id, relative_pose, information=np.eye(6)):
+        edge = PoseEdge(from_id, to_id, relative_pose, information)
+        self.edges.append(edge)
