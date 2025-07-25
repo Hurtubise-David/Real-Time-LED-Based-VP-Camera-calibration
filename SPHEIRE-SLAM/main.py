@@ -110,7 +110,7 @@ def main():
                                     descriptor = None  # fallback
                                 mp = MapPoint(position=pt, descriptor=descriptor)
                                 mp_id = map_manager.add_mappoint(mp)
-                                
+
                                 try:
                                     kf.set_mappoint(match.queryIdx, mp_id)
                                     mp.add_observation(kf_id, match.queryIdx)
@@ -141,7 +141,7 @@ def main():
                 shared_state["position"] = position
                 shared_state["matches_img"] = matches_img
                 shared_state["ransac_img"] = ransac_img
-                shared_state["map_points"] = map_manager.get_valid_mappoints()
+                shared_state["map_points"] = [mp.position.tolist() for mp in map_manager.get_valid_mappoints()]
 
                 prev_frame = frame_left
                 prev_kp, prev_des = kp_left, des_left
