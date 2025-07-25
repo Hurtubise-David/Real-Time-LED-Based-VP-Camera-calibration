@@ -21,7 +21,6 @@ shared_state = {
 }
 
 map_manager = MapManager()  # Gestionnaire central de la carte 3D
-frame_id = 0  # Identifiant unique pour les images clés (keyframes)
 
 def reset_pose():
     shared_state["pose"] = np.eye(4)
