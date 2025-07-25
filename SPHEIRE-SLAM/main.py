@@ -87,12 +87,7 @@ def main():
 
                         # 5. Ajouter à la carte
                         valid_points = [pt for pt in points_world if np.isfinite(pt).all()]
-                        shared_state.setdefault("map_points", []).extend(valid_points)
-
-                        # Conversion en liste de points (filtrés)
-                        for pt in points_world:
-                            if np.isfinite(pt).all():
-                                shared_state["map_points"].append(pt)
+                        shared_state["map_points"].extend(valid_points)
                     
 
                 if ransac_mask is not None:
