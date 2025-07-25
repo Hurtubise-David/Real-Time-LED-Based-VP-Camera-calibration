@@ -137,6 +137,12 @@ class Visualizer:
                 self.ransac_label.imgtk = img_tk
                 self.ransac_label.configure(image=img_tk)
                 self.ransac_label.update_idletasks()
+    
+    def draw_map_points(image, map_points):
+        for pt in map_points:
+            x, y, z = pt
+            cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), -1)
+        return image   
 
     def run(self):
         self.root.mainloop()
