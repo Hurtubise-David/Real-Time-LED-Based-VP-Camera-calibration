@@ -89,9 +89,13 @@ def main():
                         # 4. Projeter dans le monde
                         points_world = (pose @ points_homogeneous).T[:, :3]  # shape (N, 3)
 
-                        # 5. Ajouter à la carte
-                        valid_points = [pt for pt in points_world if np.isfinite(pt).all()]
-                        shared_state["map_points"].extend(valid_points)
+                        # 5. Ajouter les MapPoints à la carte SLAM (MapManager)
+                        for i, pt in enumerate(points_world):
+                            if np.isfinite(pt).all():
+                                mp = MapPoint(position=pt, descriptor=des_left[i])  # Descripteur associé
+                                mp_id = map_manager.add_mappoint(mp)
+                                kf.set_mappoint(i, mp_id)  # On lie ce keypoint à ce MapPoint
+                                mp.add_observation(kf_id, i)
                     
 
                 if ransac_mask is not None:
