@@ -88,7 +88,7 @@ def main():
                         shared_state.setdefault("map_points", []).extend(points_world)
 
                         # Conversion en liste de points (filtrés)
-                        for pt in points_3d:
+                        for pt in points_world:
                             if np.isfinite(pt).all():
                                 shared_state["map_points"].append(pt)
                     
