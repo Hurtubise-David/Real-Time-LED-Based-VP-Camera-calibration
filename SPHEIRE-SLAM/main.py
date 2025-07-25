@@ -103,7 +103,7 @@ def main():
                         for i, pt in enumerate(points_world):
                             if np.isfinite(pt).all():
                                 try:
-                                    idx_inlier = int(inliersL[i])  # s'assure que c'est un scalaire
+                                    idx_inlier = int(inliersL[i].item())
                                     match = matches_stereo[idx_inlier]  # accès au DMatch
                                     descriptor = des_left[match.queryIdx]  # descripteur du keypoint gauche
                                 except IndexError:
