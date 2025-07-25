@@ -63,31 +63,34 @@ def main():
                 kp_r, des_r = tracker.detect(frame_right)
                 matches_stereo, ptsL, ptsR = tracker.match(kp_left, des_left, kp_r, des_r)
 
-                # Triangulation si on a assez d'inliers
-                if len(inliers1) >= 6 and len(inliers2) >= 6:
-                    P_left = camera.K_left @ np.hstack((np.eye(3), np.zeros((3,1))))
-                    P_right = camera.K_right @ np.hstack((camera.R, camera.T.reshape(3,1)))
-                    
-                    # 1. Triangulation stéréo
-                    points_3d = triangulate_points(np.array(inliers1), np.array(inliers2), P_left, P_right)
+                if len(ptsL) >= 6 and len(ptsR) >= 6:
+                    inliersL, inliersR, stereo_mask = tracker.filter_with_ransac(np.array(ptsL), np.array(ptsR), camera.K_left)
 
-                    # 2. Transformation des points dans le repère monde
-                    ones = np.ones((points_3d.shape[0], 1))
-                    points_homogeneous = np.hstack((points_3d, ones)).T  # shape (4, N)
+                    # Triangulation si on a assez d'inliers
+                    if len(inliersL) >= 6:
+                        P_left = camera.K_left @ np.hstack((np.eye(3), np.zeros((3,1))))
+                        P_right = camera.K_right @ np.hstack((camera.R, camera.T.reshape(3,1)))
+                        
+                        # 1. Triangulation stéréo
+                        points_3d = triangulate_points(np.array(inliers1), np.array(inliers2), P_left, P_right)
 
-                    # 3. Obtenir la pose actuelle de la caméra (copie, pas référence)
-                    pose = shared_state["pose"].copy()  # (4, 4)
+                        # 2. Transformation des points dans le repère monde
+                        ones = np.ones((points_3d.shape[0], 1))
+                        points_homogeneous = np.hstack((points_3d, ones)).T  # shape (4, N)
 
-                    # 4. Projeter dans le monde
-                    points_world = (pose @ points_homogeneous).T[:, :3]  # shape (N, 3)
+                        # 3. Obtenir la pose actuelle de la caméra (copie, pas référence)
+                        pose = shared_state["pose"].copy()  # (4, 4)
 
-                    # 5. Ajouter à la carte
-                    shared_state.setdefault("map_points", []).extend(points_world)
+                        # 4. Projeter dans le monde
+                        points_world = (pose @ points_homogeneous).T[:, :3]  # shape (N, 3)
 
-                    # Conversion en liste de points (filtrés)
-                    for pt in points_3d:
-                        if np.isfinite(pt).all():
-                            shared_state["map_points"].append(pt)
+                        # 5. Ajouter à la carte
+                        shared_state.setdefault("map_points", []).extend(points_world)
+
+                        # Conversion en liste de points (filtrés)
+                        for pt in points_3d:
+                            if np.isfinite(pt).all():
+                                shared_state["map_points"].append(pt)
                     
 
                 if ransac_mask is not None:
