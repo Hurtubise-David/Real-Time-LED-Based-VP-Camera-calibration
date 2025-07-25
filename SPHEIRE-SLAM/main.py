@@ -72,7 +72,7 @@ def main():
                         P_right = camera.K_right @ np.hstack((camera.R, camera.T.reshape(3,1)))
                         
                         # 1. Triangulation stéréo
-                        points_3d = triangulate_points(np.array(inliers1), np.array(inliers2), P_left, P_right)
+                        points_3d = triangulate_points(np.array(inliersL), np.array(inliersR), P_left, P_right)
 
                         # 2. Transformation des points dans le repère monde
                         ones = np.ones((points_3d.shape[0], 1))
