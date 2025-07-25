@@ -103,14 +103,20 @@ def main():
                         for i, pt in enumerate(points_world):
                             if np.isfinite(pt).all():
                                 try:
-                                    descriptor = des_left[matches_stereo[inliersL[i].item()].queryIdx]
+                                    idx_inlier = int(inliersL[i])  # s'assure que c'est un scalaire
+                                    match = matches_stereo[idx_inlier]  # accès au DMatch
+                                    descriptor = des_left[match.queryIdx]  # descripteur du keypoint gauche
                                 except IndexError:
                                     descriptor = None  # fallback
                                 mp = MapPoint(position=pt, descriptor=descriptor)
                                 mp_id = map_manager.add_mappoint(mp)
-                                kf.set_mappoint(matches_stereo[inliersL[i]].queryIdx, mp_id)
-                                mp.add_observation(kf_id, matches_stereo[inliersL[i]].queryIdx)
-                                    
+                                
+                                try:
+                                    kf.set_mappoint(match.queryIdx, mp_id)
+                                    mp.add_observation(kf_id, match.queryIdx)
+                                except Exception:
+                                    pass  # évite le crash si match n'est pas défini
+                                                            
 
                 if ransac_mask is not None:
                     ransac_img = tracker.draw_inlier_matches(prev_frame, prev_kp, frame_left, kp_left, matches_mono, ransac_mask)
