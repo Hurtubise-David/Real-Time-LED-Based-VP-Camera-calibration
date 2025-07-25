@@ -18,10 +18,10 @@ class MapPoint:
 class Keyframe:
     def __init__(self, frame_id, pose, keypoints, descriptors):
         self.frame_id = frame_id
-        self.pose = pose  # 4x4 transformation matrix
+        self.pose = pose  # 4x4 matrix de transformation
         self.keypoints = keypoints
         self.descriptors = descriptors
-        self.map_point_indices = [-1] * len(keypoints)  # -1 if not associated
+        self.map_point_indices = [-1] * len(keypoints)  # -1 si pas associé
 
     def set_mappoint(self, kp_idx, mp_idx):
         self.map_point_indices[kp_idx] = mp_idx
