@@ -24,3 +24,10 @@ class PoseGraph:
     def add_edge(self, from_id, to_id, relative_pose, information=np.eye(6)):
         edge = PoseEdge(from_id, to_id, relative_pose, information)
         self.edges.append(edge)
+
+    def reset(self):
+        self.nodes.clear()
+        self.edges.clear()
+
+    def get_trajectory(self):
+        return [node.pose[:3, 3] for node in self.nodes.values()]
