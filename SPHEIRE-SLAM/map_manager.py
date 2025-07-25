@@ -13,3 +13,15 @@ class MapPoint:
     def remove_observation(self, keyframe_id):
         if keyframe_id in self.observations:
             del self.observations[keyframe_id]
+
+
+class Keyframe:
+    def __init__(self, frame_id, pose, keypoints, descriptors):
+        self.frame_id = frame_id
+        self.pose = pose  # 4x4 transformation matrix
+        self.keypoints = keypoints
+        self.descriptors = descriptors
+        self.map_point_indices = [-1] * len(keypoints)  # -1 if not associated
+
+    def set_mappoint(self, kp_idx, mp_idx):
+        self.map_point_indices[kp_idx] = mp_idx
