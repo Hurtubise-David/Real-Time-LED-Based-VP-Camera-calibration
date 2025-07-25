@@ -17,6 +17,9 @@ class MapPoint:
         if keyframe_id in self.observations:
             del self.observations[keyframe_id]
 
+    def num_observations(self):
+        return len(self.observations)
+
 
 class Keyframe:
 
