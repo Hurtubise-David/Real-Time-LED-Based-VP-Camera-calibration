@@ -45,15 +45,17 @@ def main():
 
     def update():
         nonlocal prev_frame, prev_kp, prev_des
-        while True:  # 🔁 Boucle infinie ici pour garder le thread en vie
+        while True:  
             frame_left, frame_right = camera.get_frames()
-            if frame is not None:
-                kp, des = tracker.detect(frame)
-                matches, pts1, pts2 = tracker.match(prev_kp, prev_des, kp, des)
+            if frame_left is not None and frame_right is not None:
+                # === 1. Tracking temporel (frame_left(t-1) vs frame_left(t)) ===
+                kp_left, des_left = tracker.detect(frame_left)
+                matches_mono, pts1, pts2 = tracker.match(prev_kp, prev_des, kp_left, des_left)
 
                 pts1_np = np.array(pts1)
                 pts2_np = np.array(pts2)
-                matches_img = tracker.draw_matches(prev_frame, prev_kp, frame, kp, matches)
+                matches_img = tracker.draw_matches(prev_frame, prev_kp, frame_left, kp_left, matches_mono)
+
                 inliers1, inliers2, ransac_mask = tracker.filter_with_ransac(pts1_np, pts2_np, camera.K_left)
 
                 # Triangulation si on a assez d'inliers
@@ -84,10 +86,11 @@ def main():
                     
 
                 if ransac_mask is not None:
-                    ransac_img = tracker.draw_inlier_matches(prev_frame, prev_kp, frame, kp, matches, ransac_mask)
+                    ransac_img = tracker.draw_inlier_matches(prev_frame, prev_kp, frame_left, kp_left, matches_mono, ransac_mask)
                 else:
                     ransac_img = matches_img.copy()
 
+                # === Estimation de pose par Essential Matrix (motion) ===
                 position = np.array([0.0, 0.0, 0.0])
                 if len(pts1) >= 6:
                     R, t = estimate_pose_essential(pts1, pts2, camera.K_left)
@@ -100,12 +103,14 @@ def main():
                         shared_state["trajectory"].append(position)
                         print(f"Position: x={position[0]:.2f}, y={position[1]:.2f}, z={position[2]:.2f}")
 
-                shared_state["frame"] = frame
+                # === UI update ===
+                shared_state["frame"] = frame_left
                 shared_state["position"] = position
                 shared_state["matches_img"] = matches_img
                 shared_state["ransac_img"] = ransac_img
-                prev_frame = frame
-                prev_kp, prev_des = kp, des
+
+                prev_frame = frame_left
+                prev_kp, prev_des = kp_left, des_left
 
             # pour éviter de boucler trop vite
             time.sleep(0.01)  
