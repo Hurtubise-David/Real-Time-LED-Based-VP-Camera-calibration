@@ -58,8 +58,8 @@ def main():
 
                 # Triangulation si on a assez d'inliers
                 if len(inliers1) >= 6 and len(inliers2) >= 6:
-                    P_left = np.hstack((camera.K, np.zeros((3,1))))
-                    P_right = camera.K @ np.hstack((camera.R, camera.T.reshape(3,1)))
+                    P_left = camera.K_left @ np.hstack((np.eye(3), np.zeros((3,1))))
+                    P_right = camera.K_right @ np.hstack((camera.R, camera.T.reshape(3,1)))
                     
                     # 1. Triangulation stéréo
                     points_3d = triangulate_points(np.array(inliers1), np.array(inliers2), P_left, P_right)
