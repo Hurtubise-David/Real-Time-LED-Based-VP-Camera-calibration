@@ -54,7 +54,7 @@ def main():
                 pts1_np = np.array(pts1)
                 pts2_np = np.array(pts2)
                 matches_img = tracker.draw_matches(prev_frame, prev_kp, frame, kp, matches)
-                inliers1, inliers2, ransac_mask = tracker.filter_with_ransac(pts1_np, pts2_np, camera.K)
+                inliers1, inliers2, ransac_mask = tracker.filter_with_ransac(pts1_np, pts2_np, camera.K_left)
 
                 # Triangulation si on a assez d'inliers
                 if len(inliers1) >= 6 and len(inliers2) >= 6:
@@ -90,7 +90,7 @@ def main():
 
                 position = np.array([0.0, 0.0, 0.0])
                 if len(pts1) >= 6:
-                    R, t = estimate_pose_essential(pts1, pts2, camera.K)
+                    R, t = estimate_pose_essential(pts1, pts2, camera.K_left)
                     if R is not None and t is not None:
                         T = np.eye(4)
                         T[:3, :3] = R
