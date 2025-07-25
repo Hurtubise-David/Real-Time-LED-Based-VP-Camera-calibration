@@ -63,6 +63,10 @@ class Visualizer:
         self.root.after(1, self.update_tk)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
+        self.map_window = None
+        self.show_map_button = ttk.Button(self.root, text="Afficher Carte 3D", command=self.open_map_window)
+        self.show_map_button.pack(pady=5)
+
     def reset_pose(self):
         if self.reset_callback:
             self.reset_callback()
