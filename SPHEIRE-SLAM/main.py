@@ -54,6 +54,18 @@ def main():
                 pts2_np = np.array(pts2)
                 matches_img = tracker.draw_matches(prev_frame, prev_kp, frame, kp, matches)
                 inliers1, inliers2, ransac_mask = tracker.filter_with_ransac(pts1_np, pts2_np, camera.K)
+
+                # Triangulation si on a assez d'inliers
+                if len(inliers1) >= 6 and len(inliers2) >= 6:
+                    P_left = np.hstack((camera.K, np.zeros((3,1))))
+                    P_right = camera.K @ np.hstack((camera.R, camera.T.reshape(3,1)))
+                    
+                    points_3d = triangulate_points(np.array(inliers1), np.array(inliers2), P_left, P_right)
+                    
+                    # Debug affichage d'un point 3D
+                    if len(points_3d) > 0:
+                        print("Exemple point 3D:", points_3d[0])
+
                 if ransac_mask is not None:
                     ransac_img = tracker.draw_inlier_matches(prev_frame, prev_kp, frame, kp, matches, ransac_mask)
                 else:
